@@ -10,13 +10,19 @@ repositories {
 }
 
 ext.ktor_version = '1.1.4'
+ext.junit_version = '5.5.1'
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "io.ktor:ktor-server-core:$ktor_version"
     implementation("io.ktor:ktor-jackson:$ktor_version")
     implementation group: "io.ktor", name: "ktor-server-netty", version: ktor_version
+    testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_version")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:$junit_version")
+    implementation("ch.qos.logback:logback-classic:1.2.3")
 }
+
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
