@@ -6,6 +6,7 @@ group 'me.soshin'
 version '1.0-SNAPSHOT'
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
@@ -21,6 +22,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_version")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:$junit_version")
     implementation("ch.qos.logback:logback-classic:1.2.3")
+    implementation("org.jetbrains.exposed:exposed:0.15.1")
+    implementation("org.postgresql:postgresql:42.2.5")
 }
 
 

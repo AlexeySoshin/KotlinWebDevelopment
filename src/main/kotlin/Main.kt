@@ -10,6 +10,9 @@ import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.transaction
 
 fun main() {
     val port = 8080
@@ -20,6 +23,18 @@ fun main() {
 }
 
 fun Application.mainModule() {
+    val host = "localhost"
+    val port = 5555
+    val dbName = "cats_db"
+    val dbUser = "cats_user"
+    val dbPassword = "catspass123"
+    val db = Database.connect("jdbc:postgresql://$host:$port/$dbName", driver = "org.postgresql.Driver",
+        user = dbUser, password = dbPassword)
+
+    transaction {
+        SchemaUtils.create(Cats)
+    }
+
     install(ContentNegotiation) {
         jackson{
             enable(SerializationFeature.INDENT_OUTPUT)
