@@ -1,3 +1,6 @@
+import cats.Cats
+import cats.CatsServiceDB
+import cats.catRouter
 import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -23,13 +26,8 @@ fun main() {
 }
 
 fun Application.mainModule() {
-    val host = "localhost"
-    val port = 5555
-    val dbName = "cats_db"
-    val dbUser = "cats_user"
-    val dbPassword = "catspass123"
-    val db = Database.connect("jdbc:postgresql://$host:$port/$dbName", driver = "org.postgresql.Driver",
-        user = dbUser, password = dbPassword)
+
+    DB.connect()
 
     transaction {
         SchemaUtils.create(Cats)
@@ -52,5 +50,6 @@ fun Application.mainModule() {
         get {
             context.respond(mapOf("Welcome" to "our Cat Hotel"))
         }
+        catRouter(CatsServiceDB())
     }
 }
