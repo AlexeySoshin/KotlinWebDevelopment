@@ -4,10 +4,7 @@ import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receiveParameters
 import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.get
-import io.ktor.routing.post
-import io.ktor.routing.route
+import io.ktor.routing.*
 
 fun Route.catRouter(catsService: CatsService) {
     route("/cats") {
@@ -21,6 +18,16 @@ fun Route.catRouter(catsService: CatsService) {
                 respond(HttpStatusCode.Created, catId)
             }
         }
+        put("/{id}") {
+            with (call) {
+                val id = requireNotNull(parameters["id"]).toInt()
+                val parameters = receiveParameters()
+                val name = requireNotNull(parameters["name"])
+                val age = parameters["age"]?.toInt()
+
+                catsService.update(id, name, age)
+            }
+        }
         get("/{id}") {
             with(call) {
                 val id = requireNotNull(parameters["id"]).toInt()
@@ -32,6 +39,12 @@ fun Route.catRouter(catsService: CatsService) {
                 else {
                     respond(cat)
                 }
+            }
+        }
+        delete("/{id}") {
+            with(call) {
+                val id = requireNotNull(parameters["id"]).toInt()
+                catsService.delete(id)
             }
         }
         get {
