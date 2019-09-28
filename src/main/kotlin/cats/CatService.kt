@@ -9,9 +9,32 @@ interface CatsService {
     suspend fun all(): List<Cat>
 
     suspend fun findById(id: Int): Cat?
+
+    suspend fun delete(id: Int)
+
+    suspend fun update(id: Int, name: String, age: Int?)
 }
 
 class CatsServiceDB : CatsService {
+    override suspend fun update(id: Int, name: String, age: Int?) {
+        transaction {
+            Cats.update({ Cats.id eq id }) {
+                it[Cats.name] = name
+                if (age != null) {
+                    it[Cats.age] = age
+                }
+            }
+        }
+    }
+
+    override suspend fun delete(id: Int) {
+        transaction {
+            Cats.deleteWhere {
+                Cats.id eq id
+            }
+        }
+    }
+
     override suspend fun findById(id: Int): Cat? {
         val row = transaction {
             addLogger(StdOutSqlLogger)

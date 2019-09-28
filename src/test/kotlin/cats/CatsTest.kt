@@ -3,6 +3,7 @@ package cats
 import asJson
 import io.ktor.application.Application
 import io.ktor.http.*
+import io.ktor.http.HttpMethod.Companion.Delete
 import io.ktor.http.HttpMethod.Companion.Get
 import io.ktor.server.testing.*
 import mainModule
@@ -46,8 +47,36 @@ class CatsTest {
         }
     }
 
+    @Test
+    fun `Delete cat`() {
+        withTestApplication(Application::mainModule) {
+            val createCall = createCat("Apollo", 12)
+            val id = createCall.response.content
+            handleRequest(Delete, "/cats/$id")
+
+            val afterDelete = handleRequest(Get, "/cats/$id")
+
+            assertEquals(HttpStatusCode.NotFound, afterDelete.response.status())
+        }
+    }
+
+    @Test
+    fun `Update cat`() {
+        withTestApplication(Application::mainModule) {
+            val createCall = createCat("Puzzy", 3)
+            val id = createCall.response.content
+            handleRequest(HttpMethod.Put, "/cats/$id") {
+                addHeader(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded.toString())
+                setBody(listOf("name" to "Fuzzy", "age" to 4.toString()).formUrlEncode())
+            }
+
+            val afterUpdate = handleRequest(HttpMethod.Get, "/cats/$id")
+            assertEquals("""{"id":1,"name":"Fuzzy","age":4}""".asJson(), afterUpdate.response.content?.asJson())
+        }
+    }
+
     @Before
-    fun cleanup() {
+    fun setup() {
         DB.connect()
         transaction {
             SchemaUtils.drop(Cats)
