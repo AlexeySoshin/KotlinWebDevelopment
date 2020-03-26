@@ -1,0 +1,23 @@
+version: '3'
+services:
+  cats_database:
+    image: postgres:11
+    ports:
+      - 5555:5432
+    environment:
+      - POSTGRES_USER=cats_user
+      - POSTGRES_PASSWORD=catspass123
+      - POSTGRES_DB=cats_db
+  web:
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - cats_database
+    environment:
+      - DB_HOST=cats_database
+      - DB_PORT=5432
+      - DB_USER=cats_user
+      - DB_PASSWORD=catspass123
+      - DB_NAME=cats_db
+
