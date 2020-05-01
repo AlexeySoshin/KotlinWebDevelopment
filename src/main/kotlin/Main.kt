@@ -28,7 +28,7 @@ fun main() {
 fun Application.mainModule() {
 
     DB.connect()
-
+    val catsService = CatsServiceDB()
     transaction {
         SchemaUtils.create(Cats)
     }
@@ -50,6 +50,7 @@ fun Application.mainModule() {
         get {
             context.respond(mapOf("Welcome" to "our Cat Hotel"))
         }
-        catRouter(CatsServiceDB())
+        catRouter(catsService)
+        graphql(catsService)
     }
 }

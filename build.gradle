@@ -13,7 +13,7 @@ repositories {
 
 mainClassName = "MainKt"
 
-ext.ktor_version = '1.1.4'
+ext.ktor_version = '1.3.2'
 ext.junit_version = '5.5.1'
 
 dependencies {
@@ -27,6 +27,8 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("org.jetbrains.exposed:exposed:0.15.1")
     implementation("org.postgresql:postgresql:42.2.5")
+    implementation("com.apurebase:kgraphql:$kgraphql_version")
+    implementation("com.apurebase:kgraphql-ktor:$kgraphql_version")
 }
 
 
