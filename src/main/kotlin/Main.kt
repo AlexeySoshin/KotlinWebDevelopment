@@ -32,6 +32,7 @@ fun Application.mainModule() {
     transaction {
         SchemaUtils.create(Cats)
     }
+    val catsService = CatsServiceDB()
 
     install(ContentNegotiation) {
         jackson{
@@ -50,6 +51,7 @@ fun Application.mainModule() {
         get {
             context.respond(mapOf("Welcome" to "our Cat Hotel"))
         }
-        catRouter(CatsServiceDB())
+        catRouter(catsService)
+        graphql(catsService)
     }
 }
