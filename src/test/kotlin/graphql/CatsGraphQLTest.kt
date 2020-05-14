@@ -41,6 +41,27 @@ class CatsGraphQLTest {
     }
 
     @Test
+    fun `GraphQL returns a single cat by name`() {
+        withTestApplication(Application::mainModule) {
+            val graphqlResponse = handleRequest(HttpMethod.Post, "/graphql") {
+                addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+                setBody("""
+                        {
+                            cat(name: \"Shmuzy\") {
+                                name
+                            }
+                        }
+                        """.asGraphQLQuery())
+            }
+
+            assertEquals(
+                """{"data":{"cat":null}}""".asJson(),
+                graphqlResponse.response.content?.asJson()
+            )
+        }
+    }
+
+    @Test
     fun `GraphQL returns a single cat`() {
         val dbCat = transaction {
             Cats.selectAll().first()
