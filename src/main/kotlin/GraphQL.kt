@@ -12,8 +12,14 @@ fun Route.graphql(catsService: CatsService) = graphql {
         }
     }
     query("cat") {
-        resolver { id: Int ->
-            catsService.findById(id)
+        resolver { id: Int?,
+                   name: String? ->
+            when {
+                id != null -> catsService.findById(id)
+                name != null -> //catsService.findByName(id)
+                    null
+                else -> null
+            }
         }
     }
 
