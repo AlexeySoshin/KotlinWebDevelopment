@@ -55,7 +55,7 @@ class CatsGraphQLTest {
             }
 
             assertEquals(
-                """{"data":{"cat":null}}""".asJson(),
+                """{"data":{"cat":{"name": "Shmuzy"}}""".asJson(),
                 graphqlResponse.response.content?.asJson()
             )
         }

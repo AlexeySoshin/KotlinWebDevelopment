@@ -17,7 +17,7 @@ fun Route.graphql(catsService: CatsService) = graphql {
             when {
                 id != null -> catsService.findById(id)
                 name != null -> //catsService.findByName(id)
-                    null
+                    Cat(id = 0, name = name, age = 0)
                 else -> null
             }
         }
