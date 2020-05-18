@@ -2,9 +2,15 @@ import cats.Cat
 import cats.CatsService
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.graphql
+import com.apurebase.kgraphql.ktor
 import io.ktor.routing.Route
 
 fun Route.graphql(catsService: CatsService) = graphql {
+    configure {
+        ktor {
+            playground = true
+        }
+    }
     query("cats") {
         resolver { ctx: Context ->
             ctx[String::class]
