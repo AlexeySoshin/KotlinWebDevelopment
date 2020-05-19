@@ -11,9 +11,14 @@ fun Route.graphql(catsService: CatsService) = graphql {
             playground = true
         }
     }
+    mutation("createCat") {
+        resolver { name: String, age: Int? ->
+            val id = catsService.create(name, age)
+            catsService.findById(id)
+        }
+    }
     query("cats") {
-        resolver { ctx: Context ->
-            ctx[String::class]
+        resolver { ->
             catsService.all()
         }
     }

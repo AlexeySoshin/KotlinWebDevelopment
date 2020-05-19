@@ -55,7 +55,28 @@ class CatsGraphQLTest {
             }
 
             assertEquals(
-                """{"data":{"cat":{"name": "Shmuzy"}}""".asJson(),
+                """{"data":{"cat":{"name": "Shmuzy"}}}""".asJson(),
+                graphqlResponse.response.content?.asJson()
+            )
+        }
+    }
+
+    @Test
+    fun `GraphQL creates a cat`() {
+        withTestApplication(Application::mainModule) {
+            val graphqlResponse = handleRequest(HttpMethod.Post, "/graphql") {
+                addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+                setBody("""
+                     mutation { 
+                        createCat(name: \"Apollo\", age: 4) { 
+                            name 
+                            age 
+                        } 
+                     }""".asGraphQLQuery())
+            }
+
+            assertEquals(
+                """{"data":{"createCat":{"name":"Apollo","age":4}}}""".asJson(),
                 graphqlResponse.response.content?.asJson()
             )
         }
